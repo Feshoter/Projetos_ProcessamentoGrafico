@@ -1,0 +1,3 @@
+C:/Users/Liz/Documents/ProcessamentoGrafico/PP2/ProcessamentoGrafico_ProjetoGrupo/build/CMakeFiles/executavel.dir
+C:/Users/Liz/Documents/ProcessamentoGrafico/PP2/ProcessamentoGrafico_ProjetoGrupo/build/CMakeFiles/edit_cache.dir
+C:/Users/Liz/Documents/ProcessamentoGrafico/PP2/ProcessamentoGrafico_ProjetoGrupo/build/CMakeFiles/rebuild_cache.dir
