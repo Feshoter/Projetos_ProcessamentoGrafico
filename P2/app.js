@@ -1,4 +1,15 @@
+/*
+Shaders
+Pequenos programas executados na GPU
+Nesta execucao vamos usar para determinar como os pixels e vértices de um objeto 3D são processados e exibidos 
+*/
 
+/*
+vertexShaderText
+
+Processa cada vértice dos objetos.
+Recebe as informações dos vértices e aplica transformações como translação, rotação e escala, e passar os dados processados para o fragment shader.
+*/
 var vertexShaderText = 
 [
 'precision mediump float;',
@@ -6,44 +17,73 @@ var vertexShaderText =
 'attribute vec3 vertPosition;',
 'attribute vec3 vertColor;',
 'varying vec3 fragColor;',
+'varying vec3 fragNormal;',
 'uniform mat4 mWorld;',
 'uniform mat4 mView;',
 'uniform mat4 mProj;',
+'uniform vec3 lightDirection;',
 '',
 'void main()',
 '{',
 '  fragColor = vertColor;',
-'  gl_Position = mProj * mView * mWorld * vec4(vertPosition, 1.0);',
+'  fragNormal = normalize((mWorld * vec4(0.0, 0.0, 1.0, 0.0)).xyz);',
+'  vec4 worldPosition = mWorld * vec4(vertPosition, 1.0);',
+'  gl_Position = mProj * mView * worldPosition;',
 '}'
 ].join('\n');
 
+
+/*
+fragmentShaderText
+Processa cada pixel do objeto, determina a cor e outros atributos do pixel.
+Recebe as informações interpoladas do vertex shader e calcula a cor final do pixel com base em luz, textura e outros efeitos.
+*/
 var fragmentShaderText =
 [
 'precision mediump float;',
 '',
 'varying vec3 fragColor;',
+'varying vec3 fragNormal;',
+'uniform vec3 lightDirection;',
 'void main()',
 '{',
-'  gl_FragColor = vec4(fragColor, 1.0);',
+'  float diff = max(dot(fragNormal, -lightDirection), 0.0);',
+
+'  vec3 lightColor = vec3(1.0, 1.0, 1.0);',     //Define a cor da luz
+
+'  vec3 ambientColor = vec3(0.5, 0.5, 0.5);',   //Define a cor do ambiente
+                                                //(1.0, 1.0, 1.0) intensidade máxima de vermelho, verde e azul - Logo temos uma cor branca
+                                                //(0.1, 0.1, 0.1) intensidade minima de vermelho, verde e azul - Logo temos uma cor cinza escura
+
+'  vec3 color = fragColor * (ambientColor + lightColor * diff);',
+'  gl_FragColor = vec4(color, 1.0);',
 '}'
 ].join('\n');
 
+//Funcao principal do programa que inicia o WebGL
 var InitProject = function () {
     console.log('This is working');
 
     var canvas = document.getElementById('game-surface');
     var gl = canvas.getContext('webgl');
 
+    //Verificacoes padroes para ver se o navegador suporta WebGL
     if (!gl) {
         console.log('WebGL not supported, falling back on experimental-webgl');
         gl = canvas.getContext('experimental-webgl');
     }
-
     if (!gl) {
         alert('Your browser does not support WebGL');
     }
 
-    gl.clearColor(0.75, 0.85, 0.8, 1.0);
+
+    gl.clearColor(0.0, 0.0, 0.0, 1.0); //Define o RGB do fundo do projeto
+    /*
+        (0.0, 0.0, 0.0, 0.0) - Cor Preto - Intensidade 0%
+        (0.0, 0.0, 0.0, 1.0) - Cor Preto - Intensidade 100%
+        (1.0, 0.0, 0.0, 0.5) - Cor Vermelho - Intensidade 50%
+    */
+
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.enable(gl.DEPTH_TEST);
     gl.enable(gl.CULL_FACE);
@@ -57,12 +97,12 @@ var InitProject = function () {
     gl.shaderSource(vertexShader, vertexShaderText);
     gl.shaderSource(fragmentShader, fragmentShaderText);
 
+    //Verificacoes padroes para ver se compilou corretamente as shaders
     gl.compileShader(vertexShader);
     if (!gl.getShaderParameter(vertexShader, gl.COMPILE_STATUS)) {
         console.error('ERROR compiling vertex shader!', gl.getShaderInfoLog(vertexShader));
         return;
     }
-
     gl.compileShader(fragmentShader);
     if (!gl.getShaderParameter(fragmentShader, gl.COMPILE_STATUS)) {
         console.error('ERROR compiling fragment shader!', gl.getShaderInfoLog(fragmentShader));
@@ -185,10 +225,13 @@ var InitProject = function () {
     var matWorldUniformLocation = gl.getUniformLocation(program, 'mWorld');
     var matViewUniformLocation = gl.getUniformLocation(program, 'mView');
     var matProjUniformLocation = gl.getUniformLocation(program, 'mProj');
+    var lightDirectionUniformLocation = gl.getUniformLocation(program, 'lightDirection');
 
     var worldMatrix = new Float32Array(16);
     var viewMatrix = new Float32Array(16);
     var projMatrix = new Float32Array(16);
+    var lightDirection = new Float32Array([0.0, 0.0, 0.0]); // Direção da luz
+
     mat4.identity(worldMatrix);
     mat4.lookAt(viewMatrix, [0, 0, -10], [0, 0, 0], [0, 1, 0]);
     mat4.perspective(projMatrix, glMatrix.toRadian(60), canvas.clientWidth / canvas.clientHeight, 0.1, 1000.0);
@@ -196,6 +239,7 @@ var InitProject = function () {
     gl.uniformMatrix4fv(matWorldUniformLocation, gl.FALSE, worldMatrix);
     gl.uniformMatrix4fv(matViewUniformLocation, gl.FALSE, viewMatrix);
     gl.uniformMatrix4fv(matProjUniformLocation, gl.FALSE, projMatrix);
+    gl.uniform3fv(lightDirectionUniformLocation, lightDirection);
 
     var xRotationMatrix = new Float32Array(16);
     var yRotationMatrix = new Float32Array(16);
@@ -205,11 +249,11 @@ var InitProject = function () {
     var amplitudeY = 2.0; // Amplitude do movimento no eixo Y
     var amplitudeX = 2.5; // Amplitude do movimento no eixo X
     var speedX = 2;
-	var speedY = 4;
+    var speedY = 4;
 
     var loop = function () {
         var time = performance.now() / 1000;
-		var angleX = time * 2 * Math.PI / 4; // Ângulo de rotação
+        var angleX = time * 2 * Math.PI / 4; // Ângulo de rotação
         var angleY = time * 2 * Math.PI / 2; // Ângulo de rotação
 
         // Cálculo do deslocamento no eixo Y usando uma função seno para o primeiro cubo
@@ -230,7 +274,6 @@ var InitProject = function () {
         gl.uniformMatrix4fv(matWorldUniformLocation, gl.FALSE, firstCubeMatrix);
     
         // Desenhar o primeiro cubo
-        gl.clearColor(0.75, 0.85, 0.8, 1.0);
         gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
         gl.drawElements(gl.TRIANGLES, boxIndices.length, gl.UNSIGNED_SHORT, 0);
     
