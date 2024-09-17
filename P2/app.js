@@ -15,8 +15,8 @@ var vertexShaderText =
 'precision mediump float;',
 '',
 'attribute vec3 vertPosition;',
-'attribute vec3 vertColor;',
-'varying vec3 fragColor;',
+'attribute vec2 vertTexCoord;',
+'varying vec2 fragTexCoord;',
 'varying vec3 fragNormal;',
 'uniform mat4 mWorld;',
 'uniform mat4 mView;',
@@ -25,7 +25,7 @@ var vertexShaderText =
 '',
 'void main()',
 '{',
-'  fragColor = vertColor;',
+'  fragTexCoord = vertTexCoord;',
 '  fragNormal = normalize((mWorld * vec4(0.0, 0.0, 1.0, 0.0)).xyz);',
 '  vec4 worldPosition = mWorld * vec4(vertPosition, 1.0);',
 '  gl_Position = mProj * mView * worldPosition;',
@@ -42,7 +42,9 @@ var fragmentShaderText =
 [
 'precision mediump float;',
 '',
-'varying vec3 fragColor;',
+'varying vec2 fragTexCoord;',
+'uniform sampler2D sampler;',
+'',
 'varying vec3 fragNormal;',
 'uniform vec3 lightDirection;',
 'void main()',
@@ -55,8 +57,8 @@ var fragmentShaderText =
                                                 //(1.0, 1.0, 1.0) intensidade máxima de vermelho, verde e azul - Logo temos uma cor branca
                                                 //(0.1, 0.1, 0.1) intensidade minima de vermelho, verde e azul - Logo temos uma cor cinza escura
 
-'  vec3 color = fragColor * (ambientColor + lightColor * diff);',
-'  gl_FragColor = vec4(color, 1.0);',
+
+'  gl_FragColor = texture2D(sampler, fragTexCoord);',
 '}'
 ].join('\n');
 
@@ -125,42 +127,42 @@ var InitProject = function () {
 
     // Create buffer
     var boxVertices = [
-        // X, Y, Z           R, G, B
+        // X, Y, Z           U, V
         // Top
-        -1.0, 1.0, -1.0,   0.5, 0.5, 0.5,
-        -1.0, 1.0, 1.0,    0.5, 0.5, 0.5,
-        1.0, 1.0, 1.0,     0.5, 0.5, 0.5,
-        1.0, 1.0, -1.0,    0.5, 0.5, 0.5,
+        -1.0, 1.0, -1.0,   0, 0,
+        -1.0, 1.0, 1.0,    0, 1,
+        1.0, 1.0, 1.0,     1, 1,
+        1.0, 1.0, -1.0,    1, 0,
 
         // Left
-        -1.0, 1.0, 1.0,    0.75, 0.25, 0.5,
-        -1.0, -1.0, 1.0,   0.75, 0.25, 0.5,
-        -1.0, -1.0, -1.0,  0.75, 0.25, 0.5,
-        -1.0, 1.0, -1.0,   0.75, 0.25, 0.5,
+        -1.0, 1.0, 1.0,    0, 0,
+        -1.0, -1.0, 1.0,   1, 0,
+        -1.0, -1.0, -1.0,  1, 1,
+        -1.0, 1.0, -1.0,   0, 1,
 
         // Right
-        1.0, 1.0, 1.0,    0.25, 0.25, 0.75,
-        1.0, -1.0, 1.0,   0.25, 0.25, 0.75,
-        1.0, -1.0, -1.0,  0.25, 0.25, 0.75,
-        1.0, 1.0, -1.0,   0.25, 0.25, 0.75,
+        1.0, 1.0, 1.0,    1, 1,
+        1.0, -1.0, 1.0,   0, 1,
+        1.0, -1.0, -1.0,  0, 0,
+        1.0, 1.0, -1.0,   1, 0,
 
         // Front
-        1.0, 1.0, 1.0,    1.0, 0.0, 0.15,
-        1.0, -1.0, 1.0,    1.0, 0.0, 0.15,
-        -1.0, -1.0, 1.0,    1.0, 0.0, 0.15,
-        -1.0, 1.0, 1.0,    1.0, 0.0, 0.15,
+        1.0, 1.0, 1.0,    1, 1,
+        1.0, -1.0, 1.0,   1, 0,
+        -1.0, -1.0, 1.0,  0, 0,
+        -1.0, 1.0, 1.0,   0, 1,
 
         // Back
-        1.0, 1.0, -1.0,    0.0, 1.0, 0.15,
-        1.0, -1.0, -1.0,    0.0, 1.0, 0.15,
-        -1.0, -1.0, -1.0,    0.0, 1.0, 0.15,
-        -1.0, 1.0, -1.0,    0.0, 1.0, 0.15,
+        1.0, 1.0, -1.0,    0, 0,
+        1.0, -1.0, -1.0,   0, 1,
+        -1.0, -1.0, -1.0,  1, 1,
+        -1.0, 1.0, -1.0,   1, 0,
 
         // Bottom
-        -1.0, -1.0, -1.0,   0.5, 0.5, 1.0,
-        -1.0, -1.0, 1.0,    0.5, 0.5, 1.0,
-        1.0, -1.0, 1.0,     0.5, 0.5, 1.0,
-        1.0, -1.0, -1.0,    0.5, 0.5, 1.0,
+        -1.0, -1.0, -1.0,   1, 1,
+        -1.0, -1.0, 1.0,    1, 0,
+        1.0, -1.0, 1.0,     0, 0,
+        1.0, -1.0, -1.0,    0, 1,
     ];
 
     var boxIndices = [
@@ -198,26 +200,40 @@ var InitProject = function () {
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(boxIndices), gl.STATIC_DRAW);
 
     var positionAttribLocation = gl.getAttribLocation(program, 'vertPosition');
-    var colorAttribLocation = gl.getAttribLocation(program, 'vertColor');
+    var texCoordAttribLocation = gl.getAttribLocation(program, 'vertTexCoord');
     gl.vertexAttribPointer(
         positionAttribLocation, // Attribute location
         3, // Number of elements per attribute
         gl.FLOAT, // Type of elements
         gl.FALSE,
-        6 * Float32Array.BYTES_PER_ELEMENT, // Size of an individual vertex
+        5 * Float32Array.BYTES_PER_ELEMENT, // Size of an individual vertex
         0 // Offset from the beginning of a single vertex to this attribute
     );
     gl.vertexAttribPointer(
-        colorAttribLocation, // Attribute location
-        3, // Number of elements per attribute
+        texCoordAttribLocation, // Attribute location
+        2, // Number of elements per attribute
         gl.FLOAT, // Type of elements
         gl.FALSE,
-        6 * Float32Array.BYTES_PER_ELEMENT, // Size of an individual vertex
+        5 * Float32Array.BYTES_PER_ELEMENT, // Size of an individual vertex
         3 * Float32Array.BYTES_PER_ELEMENT // Offset from the beginning of a single vertex to this attribute
     );
 
     gl.enableVertexAttribArray(positionAttribLocation);
-    gl.enableVertexAttribArray(colorAttribLocation);
+    gl.enableVertexAttribArray(texCoordAttribLocation);
+
+    //
+    // Create Texture
+    //
+
+    var boxTexture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, boxTexture);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, document.getElementById('slime') )
+    gl.bindTexture(gl.TEXTURE_2D, null);
 
     // Tell OpenGL state machine which program should be active.
     gl.useProgram(program);
@@ -275,6 +291,9 @@ var InitProject = function () {
     
         // Desenhar o primeiro cubo
         gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
+
+        gl.bindTexture(gl.TEXTURE_2D, boxTexture);
+        gl.activeTexture(gl.TEXTURE0);
         gl.drawElements(gl.TRIANGLES, boxIndices.length, gl.UNSIGNED_SHORT, 0);
     
         // Segundo cubo (levemente à direita)
