@@ -3,12 +3,16 @@ Ferramentas necessarias para execucao
 C++ - Linguagem de programa optada para o desenvolvimento do projeto
 
 MakeFile - Ajuda na execucao e armazenamento da informacao gerada pelo programa
+    https://cmake.org/download/
 
 Metodo para execucao do programa:
 
     Entre na pasta Build - "cd build"
 
     Execute os seguintes linhas de comando
+        rm -r CMakeCache.txt CMakeFiles #Linux-version
+        Remove-Item -Recurse -Force CMakeCache.txt, CMakeFiles #Windowns-version
+        
         cmake -G "MinGW Makefiles" ..
         mingw32-make
 
