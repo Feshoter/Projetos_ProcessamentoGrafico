@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/Liz/Documents/ProcessamentoGrafico/PP2/ProcessamentoGrafico_ProjetoGrupo
+# Install script for directory: C:/Users/Liz/Documents/ProcessamentoGrafico/Projetos_ProcessamentoGrafico/PP2
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -52,6 +52,6 @@ endif()
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-  file(WRITE "C:/Users/Liz/Documents/ProcessamentoGrafico/PP2/ProcessamentoGrafico_ProjetoGrupo/build/${CMAKE_INSTALL_MANIFEST}"
+  file(WRITE "C:/Users/Liz/Documents/ProcessamentoGrafico/Projetos_ProcessamentoGrafico/PP2/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
 endif()

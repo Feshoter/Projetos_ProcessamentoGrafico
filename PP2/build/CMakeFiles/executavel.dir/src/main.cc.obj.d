@@ -1,6 +1,6 @@
 CMakeFiles/executavel.dir/src/main.cc.obj: \
- C:\Users\Liz\Documents\ProcessamentoGrafico\PP2\ProcessamentoGrafico_ProjetoGrupo\src\main.cc \
- C:\Users\Liz\Documents\ProcessamentoGrafico\PP2\ProcessamentoGrafico_ProjetoGrupo\src\rtweekend.h \
+ C:\Users\Liz\Documents\ProcessamentoGrafico\Projetos_ProcessamentoGrafico\PP2\src\main.cc \
+ C:\Users\Liz\Documents\ProcessamentoGrafico\Projetos_ProcessamentoGrafico\PP2\src\rtweekend.h \
  c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\cmath \
  c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mingw32\bits\c++config.h \
  c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\mingw32\bits\os_defines.h \
@@ -125,16 +125,16 @@ CMakeFiles/executavel.dir/src/main.cc.obj: \
  c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\shared_ptr_atomic.h \
  c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\atomic_base.h \
  c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\backward\auto_ptr.h \
- C:\Users\Liz\Documents\ProcessamentoGrafico\PP2\ProcessamentoGrafico_ProjetoGrupo\src\color.h \
- C:\Users\Liz\Documents\ProcessamentoGrafico\PP2\ProcessamentoGrafico_ProjetoGrupo\src\interval.h \
- C:\Users\Liz\Documents\ProcessamentoGrafico\PP2\ProcessamentoGrafico_ProjetoGrupo\src\vec3.h \
- C:\Users\Liz\Documents\ProcessamentoGrafico\PP2\ProcessamentoGrafico_ProjetoGrupo\src\ray.h \
- C:\Users\Liz\Documents\ProcessamentoGrafico\PP2\ProcessamentoGrafico_ProjetoGrupo\src\camera.h \
- C:\Users\Liz\Documents\ProcessamentoGrafico\PP2\ProcessamentoGrafico_ProjetoGrupo\src\hittable.h \
- C:\Users\Liz\Documents\ProcessamentoGrafico\PP2\ProcessamentoGrafico_ProjetoGrupo\src\material.h \
- C:\Users\Liz\Documents\ProcessamentoGrafico\PP2\ProcessamentoGrafico_ProjetoGrupo\src\hittable_list.h \
+ C:\Users\Liz\Documents\ProcessamentoGrafico\Projetos_ProcessamentoGrafico\PP2\src\color.h \
+ C:\Users\Liz\Documents\ProcessamentoGrafico\Projetos_ProcessamentoGrafico\PP2\src\interval.h \
+ C:\Users\Liz\Documents\ProcessamentoGrafico\Projetos_ProcessamentoGrafico\PP2\src\vec3.h \
+ C:\Users\Liz\Documents\ProcessamentoGrafico\Projetos_ProcessamentoGrafico\PP2\src\ray.h \
+ C:\Users\Liz\Documents\ProcessamentoGrafico\Projetos_ProcessamentoGrafico\PP2\src\camera.h \
+ C:\Users\Liz\Documents\ProcessamentoGrafico\Projetos_ProcessamentoGrafico\PP2\src\hittable.h \
+ C:\Users\Liz\Documents\ProcessamentoGrafico\Projetos_ProcessamentoGrafico\PP2\src\material.h \
+ C:\Users\Liz\Documents\ProcessamentoGrafico\Projetos_ProcessamentoGrafico\PP2\src\hittable_list.h \
  c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\vector \
  c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\stl_vector.h \
  c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\stl_bvector.h \
  c:\mingw\lib\gcc\mingw32\6.3.0\include\c++\bits\vector.tcc \
- C:\Users\Liz\Documents\ProcessamentoGrafico\PP2\ProcessamentoGrafico_ProjetoGrupo\src\sphere.h
+ C:\Users\Liz\Documents\ProcessamentoGrafico\Projetos_ProcessamentoGrafico\PP2\src\sphere.h

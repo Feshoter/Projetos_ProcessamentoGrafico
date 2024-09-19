@@ -53,10 +53,10 @@ RM = C:\CMake\cmake-3.30.3-windows-x86_64\cmake-3.30.3-windows-x86_64\bin\cmake.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = C:\Users\Liz\Documents\ProcessamentoGrafico\PP2\ProcessamentoGrafico_ProjetoGrupo
+CMAKE_SOURCE_DIR = C:\Users\Liz\Documents\ProcessamentoGrafico\Projetos_ProcessamentoGrafico\PP2
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = C:\Users\Liz\Documents\ProcessamentoGrafico\PP2\ProcessamentoGrafico_ProjetoGrupo\build
+CMAKE_BINARY_DIR = C:\Users\Liz\Documents\ProcessamentoGrafico\Projetos_ProcessamentoGrafico\PP2\build
 
 #=============================================================================
 # Directory level rules for the build root directory
@@ -80,14 +80,14 @@ clean: CMakeFiles/executavel.dir/clean
 CMakeFiles/executavel.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\executavel.dir\build.make CMakeFiles/executavel.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\executavel.dir\build.make CMakeFiles/executavel.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\Liz\Documents\ProcessamentoGrafico\PP2\ProcessamentoGrafico_ProjetoGrupo\build\CMakeFiles --progress-num=1,2 "Built target executavel"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\Liz\Documents\ProcessamentoGrafico\Projetos_ProcessamentoGrafico\PP2\build\CMakeFiles --progress-num=1,2 "Built target executavel"
 .PHONY : CMakeFiles/executavel.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/executavel.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Liz\Documents\ProcessamentoGrafico\PP2\ProcessamentoGrafico_ProjetoGrupo\build\CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Liz\Documents\ProcessamentoGrafico\Projetos_ProcessamentoGrafico\PP2\build\CMakeFiles 2
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/executavel.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Liz\Documents\ProcessamentoGrafico\PP2\ProcessamentoGrafico_ProjetoGrupo\build\CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Liz\Documents\ProcessamentoGrafico\Projetos_ProcessamentoGrafico\PP2\build\CMakeFiles 0
 .PHONY : CMakeFiles/executavel.dir/rule
 
 # Convenience name for target.

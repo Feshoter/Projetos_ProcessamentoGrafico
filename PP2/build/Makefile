@@ -56,10 +56,10 @@ RM = C:\CMake\cmake-3.30.3-windows-x86_64\cmake-3.30.3-windows-x86_64\bin\cmake.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = C:\Users\Liz\Documents\ProcessamentoGrafico\PP2\ProcessamentoGrafico_ProjetoGrupo
+CMAKE_SOURCE_DIR = C:\Users\Liz\Documents\ProcessamentoGrafico\Projetos_ProcessamentoGrafico\PP2
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = C:\Users\Liz\Documents\ProcessamentoGrafico\PP2\ProcessamentoGrafico_ProjetoGrupo\build
+CMAKE_BINARY_DIR = C:\Users\Liz\Documents\ProcessamentoGrafico\Projetos_ProcessamentoGrafico\PP2\build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -86,9 +86,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Liz\Documents\ProcessamentoGrafico\PP2\ProcessamentoGrafico_ProjetoGrupo\build\CMakeFiles C:\Users\Liz\Documents\ProcessamentoGrafico\PP2\ProcessamentoGrafico_ProjetoGrupo\build\\CMakeFiles\progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Liz\Documents\ProcessamentoGrafico\Projetos_ProcessamentoGrafico\PP2\build\CMakeFiles C:\Users\Liz\Documents\ProcessamentoGrafico\Projetos_ProcessamentoGrafico\PP2\build\\CMakeFiles\progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Liz\Documents\ProcessamentoGrafico\PP2\ProcessamentoGrafico_ProjetoGrupo\build\CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Liz\Documents\ProcessamentoGrafico\Projetos_ProcessamentoGrafico\PP2\build\CMakeFiles 0
 .PHONY : all
 
 # The main clean target

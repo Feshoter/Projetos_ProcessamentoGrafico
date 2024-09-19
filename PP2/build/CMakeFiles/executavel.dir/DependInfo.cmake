@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "C:/Users/Liz/Documents/ProcessamentoGrafico/PP2/ProcessamentoGrafico_ProjetoGrupo/src/main.cc" "CMakeFiles/executavel.dir/src/main.cc.obj" "gcc" "CMakeFiles/executavel.dir/src/main.cc.obj.d"
+  "C:/Users/Liz/Documents/ProcessamentoGrafico/Projetos_ProcessamentoGrafico/PP2/src/main.cc" "CMakeFiles/executavel.dir/src/main.cc.obj" "gcc" "CMakeFiles/executavel.dir/src/main.cc.obj.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

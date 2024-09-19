@@ -19,48 +19,51 @@
 
 
 int main() {
+
+    //Mode e a variavel que vai controlar qual imagem vai ser processada
+    // 0 e 1 representam a imagem com a camera num angulo top-down, 0 com elas proximas e 1 com ela igualmente separadas
+    // 2 e 3 representam a imagem com a camera no angulo do horizonte, com 2 sendo ela em desordem e o 3 ordenadas
+    int mode = 3; 
     hittable_list world;
 
+    //Chamada para criacao do chao
     auto ground_material = make_shared<lambertian>(color(0.5, 0.5, 0.5));
     world.add(make_shared<sphere>(point3(0,-1000,0), 1000, ground_material));
 
-    for (int a = -11; a < 11; a++) {
-        for (int b = -11; b < 11; b++) {
-            auto choose_mat = random_double();
-            point3 center(a + 0.9*random_double(), 0.2, b + 0.9*random_double());
+    //Esfera de madeira
+    auto material1 = make_shared<lambertian>(color(0.4, 0.2, 0.1));
 
-            if ((center - point3(4, 0.2, 0)).length() > 0.9) {
-                shared_ptr<material> sphere_material;
+    //Esfera de prata polida (Reflete bem a luz, quase como um espelho)
+    auto material2 = make_shared<metal>(color(0.7, 0.6, 0.5), 0.0);
 
-                if (choose_mat < 0.8) {
-                    // diffuse
-                    auto albedo = color::random() * color::random();
-                    sphere_material = make_shared<lambertian>(albedo);
-                    world.add(make_shared<sphere>(center, 0.2, sphere_material));
-                } else if (choose_mat < 0.95) {
-                    // metal
-                    auto albedo = color::random(0.5, 1);
-                    auto fuzz = random_double(0, 0.5);
-                    sphere_material = make_shared<metal>(albedo, fuzz);
-                    world.add(make_shared<sphere>(center, 0.2, sphere_material));
-                } else {
-                    // glass
-                    sphere_material = make_shared<dielectric>(1.5);
-                    world.add(make_shared<sphere>(center, 0.2, sphere_material));
-                }
-            }
-        }
-    }
+    //Esfera azul de "borracha" (Material pouco refletivel que tem uma cor solida)
+    auto material3 = make_shared<lambertian>(color(0.2, 0.3, 0.7));
 
-    auto material1 = make_shared<dielectric>(1.5);
-    world.add(make_shared<sphere>(point3(0, 1, 0), 1.0, material1));
+    //Esfera de ouro "Escovado" (Reflete as cores, mas com pouca definicao de formas)
+    auto material4 = make_shared<metal>(color(0.8, 0.6, 0.2), 0.3);
 
-    auto material2 = make_shared<lambertian>(color(0.4, 0.2, 0.1));
-    world.add(make_shared<sphere>(point3(-4, 1, 0), 1.0, material2));
+    //Esfera verde de "borracha" (Material pouco refletivel que tem uma cor solida)
+    auto material5 = make_shared<lambertian>(color(0.1, 0.8, 0.1));
 
-    auto material3 = make_shared<metal>(color(0.7, 0.6, 0.5), 0.0);
-    world.add(make_shared<sphere>(point3(4, 1, 0), 1.0, material3));
+    // Esfera de Vidro Transparente: uma bola de vidro clara 
+    auto material1a = make_shared<dielectric>(1.5);
+    
+    // Esfera de Vidro Oca: parece vidro imerso em água
+    auto materialba = make_shared<dielectric>(1.0 / 1.5);
 
+    // Esfera de cobre fosca, sem reflexos nítidos
+    auto material2a = make_shared<lambertian>(color(0.9, 0.5, 0.4));
+
+    // Esfera ciano cromada, superfície altamente reflexiva
+    auto material3a = make_shared<metal>(color(0, 1, 1), 0.0);
+
+    // Esfera magenta cromada, superfície altamente reflexiva
+    auto material4a = make_shared<metal>(color(1, 0, 1), 0.0);
+
+    // Esfera azul-conza de "borracha" parecida com um brinquedo de borracha
+    auto material5a = make_shared<lambertian>(color(0.3, 0.4, 0.5));
+
+    //Inicializacao da camera e seus paremetros universais
     camera cam;
 
     cam.aspect_ratio      = 16.0 / 9.0;
@@ -68,13 +71,94 @@ int main() {
     cam.samples_per_pixel = 10;
     cam.max_depth         = 20;
 
-    cam.vfov     = 20;
-    cam.lookfrom = point3(13,2,3);
-    cam.lookat   = point3(0,0,0);
-    cam.vup      = vec3(0,1,0);
+    switch (mode)
+    {
+    case 0:
+        //Na criacao de esferas, aqui esta o     x  y  z  Y sempre é inicializado com 1 pois ele conta a partir do meio da esfera
+            world.add(make_shared<sphere>(point3(0, 1, 0), 1.0, material1));
 
-    cam.defocus_angle = 0.6;
-    cam.focus_dist    = 10.0;
+            world.add(make_shared<sphere>(point3(-1, 1, 4), 1.0, material4));
+            
+            world.add(make_shared<sphere>(point3(1, 1, -4), 1.0, material2));
 
+            world.add(make_shared<sphere>(point3(-1, 1, -4), 1.0, material3));
+
+            world.add(make_shared<sphere>(point3(1, 1, 4), 1.0, material5));
+
+            cam.vfov     = 40;
+            cam.lookfrom = point3(0, 15, 0); 
+            cam.lookat   = point3(0, 0, 0); 
+            cam.vup      = vec3(0, 0, -1);
+            cam.defocus_angle = 0.6;
+            cam.focus_dist    = 15.0;
+
+        break;
+    
+    case 1:
+            world.add(make_shared<sphere>(point3(0, 1, 0), 1.0, material1));
+
+            world.add(make_shared<sphere>(point3(-2, 1, 2), 1.0, material4));
+
+            world.add(make_shared<sphere>(point3(2, 1, -2), 1.0, material2));
+
+            world.add(make_shared<sphere>(point3(-2, 1, -2), 1.0, material3));
+
+            world.add(make_shared<sphere>(point3(2, 1, 2), 1.0, material5));
+
+            cam.vfov     = 40;
+            cam.lookfrom = point3(0, 15, 0); 
+            cam.lookat   = point3(0, 0, 0); 
+            cam.vup      = vec3(0, 0, -1);
+            cam.defocus_angle = 0.6;
+            cam.focus_dist    = 15.0;
+
+        break;
+    
+    case 2:
+            world.add(make_shared<sphere>(point3(-5, 1, 0), 1.0, material1a));
+
+            world.add(make_shared<sphere>(point3(-5, 1, 0), 0.7, materialba));
+
+            world.add(make_shared<sphere>(point3(5, 1, 0), 1.0, material4a));
+
+            world.add(make_shared<sphere>(point3(-2.5, 1, 0), 1.0, material2a));
+
+            world.add(make_shared<sphere>(point3(0, 1, 0), 1.0, material3a));
+
+            world.add(make_shared<sphere>(point3(2.5, 1, 0), 1.0, material5a));
+
+            cam.vfov     = 20;
+            cam.lookfrom = point3(-13, 2, 15);
+            cam.lookat   = point3(-1, 0, 0);
+            cam.vup      = vec3(0,1,0);
+            cam.defocus_angle = 0.6;
+            cam.focus_dist    = 15.0;
+
+        break;
+        
+    case 3:
+            world.add(make_shared<sphere>(point3(-1.25, 1, 3), 1.0, material1a));
+
+            world.add(make_shared<sphere>(point3(-1.25, 1, 3), 0.9, materialba));
+
+            world.add(make_shared<sphere>(point3(1.25, 1, 3), 1.0, material4a));  
+
+            world.add(make_shared<sphere>(point3(-2.5, 1, 0), 1.0, material2a));
+
+            world.add(make_shared<sphere>(point3(0, 1, 0), 1.0, material3a));
+            
+            world.add(make_shared<sphere>(point3(2.5, 1, 0), 1.0, material5a));        
+
+            cam.vfov     = 20;
+            cam.lookfrom = point3(0, 4, 15);
+            cam.lookat   = point3(-1, 0, 0);
+            cam.vup      = vec3(0,1,0);
+            cam.defocus_angle = 0.6;
+            cam.focus_dist    = 15.0;
+
+        break;
+    }
+    //Renderizacao da imagem
     cam.render(world);
+
 }
