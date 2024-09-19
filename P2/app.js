@@ -1,7 +1,8 @@
 /*
-Shaders
-Pequenos programas executados na GPU
-Nesta execucao vamos usar para determinar como os pixels e vértices de um objeto 3D são processados e exibidos 
+Dagaz G. Roque - 802184
+Danillo Santiago O. da Conceição - 801487
+Elizabeth B. Salvati - 792177
+João Henrique de C. Brants  - 802553
 */
 
 /*
