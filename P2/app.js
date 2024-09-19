@@ -57,8 +57,8 @@ var fragmentShaderText =
                                                 //(1.0, 1.0, 1.0) intensidade máxima de vermelho, verde e azul - Logo temos uma cor branca
                                                 //(0.1, 0.1, 0.1) intensidade minima de vermelho, verde e azul - Logo temos uma cor cinza escura
 
-
-'  gl_FragColor = texture2D(sampler, fragTexCoord);',
+' highp vec4 texelColor = texture2D(sampler, fragTexCoord);',
+'  gl_FragColor = vec4(texelColor.rgb *  (ambientColor + lightColor * diff), texelColor.a);',
 '}'
 ].join('\n');
 
