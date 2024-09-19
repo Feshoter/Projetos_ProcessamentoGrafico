@@ -12,23 +12,23 @@ Recebe as informações dos vértices e aplica transformações como translaçã
 */
 var vertexShaderText = 
 [
-'precision mediump float;',
+'precision mediump float;', // Define a precisão das variáveis float
 '',
-'attribute vec3 vertPosition;',
-'attribute vec2 vertTexCoord;',
-'varying vec2 fragTexCoord;',
-'varying vec3 fragNormal;',
-'uniform mat4 mWorld;',
-'uniform mat4 mView;',
-'uniform mat4 mProj;',
-'uniform vec3 lightDirection;',
+'attribute vec3 vertPosition;', // Posição do vértice
+'attribute vec2 vertTexCoord;', // Coordenadas de textura do vértice
+'varying vec2 fragTexCoord;', // Coordenadas de textura passadas para o fragment shader
+'varying vec3 fragNormal;', // Normal do vértice passada para o fragment shader
+'uniform mat4 mWorld;', // Matriz de transformação do mundo
+'uniform mat4 mView;', // Matriz de visualização
+'uniform mat4 mProj;', // Matriz de projeção
+'uniform vec3 lightDirection;', // Direção da luz
 '',
-'void main()',
+'void main()', // Função principal do vertex shader
 '{',
-'  fragTexCoord = vertTexCoord;',
-'  fragNormal = normalize((mWorld * vec4(0.0, 0.0, 1.0, 0.0)).xyz);',
-'  vec4 worldPosition = mWorld * vec4(vertPosition, 1.0);',
-'  gl_Position = mProj * mView * worldPosition;',
+'  fragTexCoord = vertTexCoord;', // Passa as coordenadas de textura para o fragment shader
+'  fragNormal = normalize((mWorld * vec4(0.0, 0.0, 1.0, 0.0)).xyz);', // Calcula a normal do vértice
+'  vec4 worldPosition = mWorld * vec4(vertPosition, 1.0);', // Transforma a posição do vértice para o espaço do mundo
+'  gl_Position = mProj * mView * worldPosition;', // Define a posição final do vértice na tela
 '}'
 ].join('\n');
 
@@ -40,25 +40,24 @@ Recebe as informações interpoladas do vertex shader e calcula a cor final do p
 */
 var fragmentShaderText =
 [
-'precision mediump float;',
+'precision mediump float;', // Define a precisão das variáveis float
 '',
-'varying vec2 fragTexCoord;',
-'uniform sampler2D sampler;',
+'varying vec2 fragTexCoord;', // Coordenadas de textura recebidas do vertex shader
+'uniform sampler2D sampler;', // Amostrador de textura
 '',
-'varying vec3 fragNormal;',
-'uniform vec3 lightDirection;',
-'void main()',
+'varying vec3 fragNormal;', // Normal recebida do vertex shader
+'uniform vec3 lightDirection;', // Direção da luz
+'void main()', // Função principal do fragment shader
 '{',
-'  float diff = max(dot(fragNormal, -lightDirection), 0.0);',
+'  float diff = max(dot(fragNormal, -lightDirection), 0.0);', // Calcula o fator de difusão da luz
 
-'  vec3 lightColor = vec3(1.0, 1.0, 1.0);',     //Define a cor da luz
+'  vec3 lightColor = vec3(1.0, 1.0, 1.0);',     // Define a cor da luz
+'  vec3 ambientColor = vec3(0.5, 0.5, 0.5);',   // Define a cor do ambiente
+                                                // (1.0, 1.0, 1.0) intensidade máxima de vermelho, verde e azul - Logo temos uma cor branca
+                                                // (0.5, 0.5, 0.5) intensidade média de vermelho, verde e azul - Logo temos uma cor cinza clara 
 
-'  vec3 ambientColor = vec3(0.5, 0.5, 0.5);',   //Define a cor do ambiente
-                                                //(1.0, 1.0, 1.0) intensidade máxima de vermelho, verde e azul - Logo temos uma cor branca
-                                                //(0.1, 0.1, 0.1) intensidade minima de vermelho, verde e azul - Logo temos uma cor cinza escura
-
-' highp vec4 texelColor = texture2D(sampler, fragTexCoord);',
-'  gl_FragColor = vec4(texelColor.rgb *  (ambientColor + lightColor * diff), texelColor.a);',
+' highp vec4 texelColor = texture2D(sampler, fragTexCoord);', // Adiciona a textura
+'  gl_FragColor = vec4(texelColor.rgb *  (ambientColor + lightColor * diff), texelColor.a);', // Define a cor final do fragmento
 '}'
 ].join('\n');
 
@@ -66,10 +65,10 @@ var fragmentShaderText =
 var InitProject = function () {
     console.log('This is working');
 
-    var canvas = document.getElementById('game-surface');
-    var gl = canvas.getContext('webgl');
+    var canvas = document.getElementById('game-surface'); // Obtém o elemento canvas
+    var gl = canvas.getContext('webgl'); // Cria um contexto WebGL
 
-    //Verificacoes padroes para ver se o navegador suporta WebGL
+    //Verificações padrões para ver se o navegador suporta WebGL
     if (!gl) {
         console.log('WebGL not supported, falling back on experimental-webgl');
         gl = canvas.getContext('experimental-webgl');
@@ -86,20 +85,20 @@ var InitProject = function () {
         (1.0, 0.0, 0.0, 0.5) - Cor Vermelho - Intensidade 50%
     */
 
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    gl.enable(gl.DEPTH_TEST);
-    gl.enable(gl.CULL_FACE);
-    gl.frontFace(gl.CCW);
-    gl.cullFace(gl.BACK);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); // Limpa o buffer de cor e profundidade
+    gl.enable(gl.DEPTH_TEST); // Ativa o teste de profundidade
+    gl.enable(gl.CULL_FACE); // Ativa o culling de faces
+    gl.frontFace(gl.CCW); // Define a ordem das faces frontais
+    gl.cullFace(gl.BACK); // Culling nas faces traseiras
 
-    // Create shaders
+    // Cria os shaders
     var vertexShader = gl.createShader(gl.VERTEX_SHADER);
     var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
 
     gl.shaderSource(vertexShader, vertexShaderText);
     gl.shaderSource(fragmentShader, fragmentShaderText);
 
-    //Verificacoes padroes para ver se compilou corretamente as shaders
+    //verficações padrões  para ver se compilou corretamente as shaders
     gl.compileShader(vertexShader);
     if (!gl.getShaderParameter(vertexShader, gl.COMPILE_STATUS)) {
         console.error('ERROR compiling vertex shader!', gl.getShaderInfoLog(vertexShader));
@@ -111,6 +110,7 @@ var InitProject = function () {
         return;
     }
 
+    // Cria e vincula o programa
     var program = gl.createProgram();
     gl.attachShader(program, vertexShader);
     gl.attachShader(program, fragmentShader);
@@ -125,40 +125,40 @@ var InitProject = function () {
         return;
     }
 
-    // Create buffer
+    // Criação dos buffers de vértices e índices
     var boxVertices = [
         // X, Y, Z           U, V
-        // Top
+        // Acima
         -1.0, 1.0, -1.0,   0, 0,
         -1.0, 1.0, 1.0,    0, 1,
         1.0, 1.0, 1.0,     1, 1,
         1.0, 1.0, -1.0,    1, 0,
 
-        // Left
+        // Esquerda
         -1.0, 1.0, 1.0,    0, 0,
         -1.0, -1.0, 1.0,   1, 0,
         -1.0, -1.0, -1.0,  1, 1,
         -1.0, 1.0, -1.0,   0, 1,
 
-        // Right
+        // Direita
         1.0, 1.0, 1.0,    1, 1,
         1.0, -1.0, 1.0,   0, 1,
         1.0, -1.0, -1.0,  0, 0,
         1.0, 1.0, -1.0,   1, 0,
 
-        // Front
+        // Frente
         1.0, 1.0, 1.0,    1, 1,
         1.0, -1.0, 1.0,   1, 0,
         -1.0, -1.0, 1.0,  0, 0,
         -1.0, 1.0, 1.0,   0, 1,
 
-        // Back
+        // Atrás
         1.0, 1.0, -1.0,    0, 0,
         1.0, -1.0, -1.0,   0, 1,
         -1.0, -1.0, -1.0,  1, 1,
         -1.0, 1.0, -1.0,   1, 0,
 
-        // Bottom
+        // Abaixo
         -1.0, -1.0, -1.0,   1, 1,
         -1.0, -1.0, 1.0,    1, 0,
         1.0, -1.0, 1.0,     0, 0,
@@ -166,27 +166,27 @@ var InitProject = function () {
     ];
 
     var boxIndices = [
-        // Top
+        // Acima
         0, 1, 2,
         0, 2, 3,
 
-        // Left
+        // Esquerda
         5, 4, 6,
         6, 4, 7,
 
-        // Right
+        // Direita
         8, 9, 10,
         8, 10, 11,
 
-        // Front
+        // Frente
         13, 12, 14,
         15, 14, 12,
 
-        // Back
+        // Atrás
         16, 17, 18,
         16, 18, 19,
 
-        // Bottom
+        // Abaixo
         21, 20, 22,
         22, 20, 23
     ];
@@ -199,50 +199,56 @@ var InitProject = function () {
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, boxIndexBufferObject);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(boxIndices), gl.STATIC_DRAW);
 
+     // Configura os atributos do vertex shader
     var positionAttribLocation = gl.getAttribLocation(program, 'vertPosition');
     var texCoordAttribLocation = gl.getAttribLocation(program, 'vertTexCoord');
     gl.vertexAttribPointer(
-        positionAttribLocation, // Attribute location
-        3, // Number of elements per attribute
-        gl.FLOAT, // Type of elements
+        positionAttribLocation, // Localização do atributo
+        3, // Número de elementos por atributo
+        gl.FLOAT, // Tipo dos elementos
         gl.FALSE,
-        5 * Float32Array.BYTES_PER_ELEMENT, // Size of an individual vertex
-        0 // Offset from the beginning of a single vertex to this attribute
+        5 * Float32Array.BYTES_PER_ELEMENT, // Tamanho de um vértice individual
+        0 // Offset do início de um vértice individual para este atribut
     );
     gl.vertexAttribPointer(
-        texCoordAttribLocation, // Attribute location
-        2, // Number of elements per attribute
-        gl.FLOAT, // Type of elements
+        texCoordAttribLocation, // Localização do atributo
+        2, // Número de elementos por atributo
+        gl.FLOAT, // Tipo dos elementos
         gl.FALSE,
-        5 * Float32Array.BYTES_PER_ELEMENT, // Size of an individual vertex
-        3 * Float32Array.BYTES_PER_ELEMENT // Offset from the beginning of a single vertex to this attribute
+        5 * Float32Array.BYTES_PER_ELEMENT, // Tamanho de um vértice individual
+        3 * Float32Array.BYTES_PER_ELEMENT // Offset para as coordenadas de textura
     );
 
+    // Habilita os atributos para uso
     gl.enableVertexAttribArray(positionAttribLocation);
     gl.enableVertexAttribArray(texCoordAttribLocation);
 
     //
-    // Create Texture
+    // Criar Textura
     //
-
     var boxTexture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, boxTexture);
+
+    // Configurações da textura
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 
+    // Carrega a imagem como textura
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, document.getElementById('slime') )
     gl.bindTexture(gl.TEXTURE_2D, null);
 
-    // Tell OpenGL state machine which program should be active.
+    // Define o programa ativo
     gl.useProgram(program);
 
+    // Obter localizações das variáveis uniformes
     var matWorldUniformLocation = gl.getUniformLocation(program, 'mWorld');
     var matViewUniformLocation = gl.getUniformLocation(program, 'mView');
     var matProjUniformLocation = gl.getUniformLocation(program, 'mProj');
     var lightDirectionUniformLocation = gl.getUniformLocation(program, 'lightDirection');
 
+    // Inicializar matrizes e direção da luz
     var worldMatrix = new Float32Array(16);
     var viewMatrix = new Float32Array(16);
     var projMatrix = new Float32Array(16);
@@ -252,16 +258,19 @@ var InitProject = function () {
     mat4.lookAt(viewMatrix, [0, 0, -10], [0, 0, 0], [0, 1, 0]);
     mat4.perspective(projMatrix, glMatrix.toRadian(60), canvas.clientWidth / canvas.clientHeight, 0.1, 1000.0);
 
+    // Enviar matrizes uniformes para os shaders
     gl.uniformMatrix4fv(matWorldUniformLocation, gl.FALSE, worldMatrix);
     gl.uniformMatrix4fv(matViewUniformLocation, gl.FALSE, viewMatrix);
     gl.uniformMatrix4fv(matProjUniformLocation, gl.FALSE, projMatrix);
     gl.uniform3fv(lightDirectionUniformLocation, lightDirection);
 
+    // Matrizes auxiliares para rotação
     var xRotationMatrix = new Float32Array(16);
     var yRotationMatrix = new Float32Array(16);
     var identityMatrix = new Float32Array(16);
     mat4.identity(identityMatrix);
 
+    // Parâmetros de movimento dos cubos
     var amplitudeY = 2.0; // Amplitude do movimento no eixo Y
     var amplitudeX = 2.5; // Amplitude do movimento no eixo X
     var speedX = 2;
@@ -311,5 +320,6 @@ var InitProject = function () {
         requestAnimationFrame(loop);
     };
 
+    // Iniciar o loop de renderização
     requestAnimationFrame(loop);
 };
